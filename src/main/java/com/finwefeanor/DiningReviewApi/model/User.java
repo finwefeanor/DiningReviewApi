@@ -28,4 +28,5 @@ public class User {
     boolean hasPeanutAllergy;
     boolean hasEggAllergy;
     boolean hasDairyAllergy;
+
 }
