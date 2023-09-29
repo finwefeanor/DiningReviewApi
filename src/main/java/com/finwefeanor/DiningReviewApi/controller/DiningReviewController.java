@@ -2,6 +2,7 @@ package com.finwefeanor.DiningReviewApi.controller;
 
 import com.finwefeanor.DiningReviewApi.model.*;
 import com.finwefeanor.DiningReviewApi.repository.DiningReviewRepository;
+import com.finwefeanor.DiningReviewApi.repository.RestaurantRepository;
 import com.finwefeanor.DiningReviewApi.repository.UserRepository;
 import jdk.jshell.Snippet;
 import org.springframework.http.HttpStatus;
@@ -17,9 +18,12 @@ import java.util.Optional;
 @RequestMapping("/reviews")
 public class DiningReviewController {
     private final DiningReviewRepository diningReviewRepository;
+    private final RestaurantRepository restaurantRepository;
 
-    public DiningReviewController(DiningReviewRepository diningReviewRepository) {
+    public DiningReviewController(DiningReviewRepository diningReviewRepository,
+                                  RestaurantRepository restaurantRepository) {
         this.diningReviewRepository = diningReviewRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
     @GetMapping("/pendingReviews")
@@ -53,12 +57,12 @@ public class DiningReviewController {
     }
     @GetMapping("/restaurant/{restaurantId}/approvedReviews")
     public List<DiningReview> getApprovedReviewsForRestaurant(@PathVariable Long restaurantId){
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
-        if(restaurant == null){
-                 throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant Not Found");
+        Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurantId);
+        if (!optionalRestaurant.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant Not Found");
         }
+        Restaurant restaurant = optionalRestaurant.get();
         return diningReviewRepository.findByRestaurantAndStatus(restaurant, ReviewStatus.ACCEPTED);
-
     }
 
 }
