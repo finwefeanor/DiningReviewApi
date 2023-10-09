@@ -1,4 +1,5 @@
 package com.finwefeanor.DiningReviewApi.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -10,7 +11,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-@Entity
+@Entity(name = "app_user")
 @Data
 public class User {
 
@@ -36,6 +37,7 @@ public class User {
     @Column(nullable = false)
     private String zipCode;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")//For our example, a User can write many reviews,
     // so you would use this on the User side to describe the relationship with DiningReview.
     //The mappedBy attribute in @OneToMany tells JPA which field on the DiningReview entity

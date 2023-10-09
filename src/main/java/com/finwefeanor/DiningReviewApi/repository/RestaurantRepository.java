@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
     // 1. Check if a restaurant with the same name and zip code already exists
-    Optional<Restaurant> findByNameAndZipCode(String name, String zipCode);
+    Optional<Restaurant> findByRestaurantNameAndZipCode(String name, String zipCode);
 
     // 2. Fetching details by unique ID is already provided by CrudRepository's findById(Long id) method
     Restaurant findById(long id);
@@ -22,4 +22,5 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
     List<Restaurant> findByZipCodeAndAverageEggScoreNotNullOrderByAverageEggScoreDesc(String zipCode);
     List<Restaurant> findByZipCodeAndAverageDairyScoreNotNullOrderByAverageDairyScoreDesc(String zipCode);
 
+    Optional<Restaurant> findByRestaurantName(String restaurantName);
 }

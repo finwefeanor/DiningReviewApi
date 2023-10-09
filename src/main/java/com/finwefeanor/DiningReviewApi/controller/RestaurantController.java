@@ -3,6 +3,7 @@ package com.finwefeanor.DiningReviewApi.controller;
 import com.finwefeanor.DiningReviewApi.model.DiningReview;
 import com.finwefeanor.DiningReviewApi.model.Restaurant;
 import com.finwefeanor.DiningReviewApi.model.ReviewStatus;
+import com.finwefeanor.DiningReviewApi.model.User;
 import com.finwefeanor.DiningReviewApi.repository.DiningReviewRepository;
 import com.finwefeanor.DiningReviewApi.repository.RestaurantRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 @RestController
 @RequestMapping("/restaurants")
 public class RestaurantController {
@@ -32,7 +36,11 @@ public class RestaurantController {
         }else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant Not Found");
         }
-
+    }
+    @GetMapping
+    public List<Restaurant> getAllRestaurants() {
+        return StreamSupport.stream(restaurantRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     /* TODO
@@ -60,7 +68,7 @@ public class RestaurantController {
     @PostMapping //no need addNewRestaurant endpoint
     public ResponseEntity<String> createNewRestaurant(@RequestBody Restaurant restaurant) {
         Optional<Restaurant> optionalRestaurant = restaurantRepository.
-                findByNameAndZipCode(restaurant.getRestaurantName(), restaurant.getZipCode());
+                findByRestaurantNameAndZipCode(restaurant.getRestaurantName(), restaurant.getZipCode());
         if (optionalRestaurant.isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Restaurant already exists in the specified zip code!");
         }

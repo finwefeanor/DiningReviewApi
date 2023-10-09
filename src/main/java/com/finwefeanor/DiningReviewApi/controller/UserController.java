@@ -9,7 +9,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/users")
@@ -32,6 +35,12 @@ public class UserController {
                         (HttpStatus.NOT_FOUND, "User not found");
         }
     }
+
+    @GetMapping
+    public List<User> getAllUsers() {
+        return StreamSupport.stream(userRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+    }
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id,
                              @Valid @RequestBody User user) {
@@ -49,7 +58,7 @@ public class UserController {
         // Save the updated user
         return userRepository.save(existingUser);
     }
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<User> createNewUser(@Valid @RequestBody User user) {
         //creates a user profile for an unregistered user, using a display name that’s unique only to user.
         Optional<User> existingUser = userRepository.findByDisplayName(user.getDisplayName());

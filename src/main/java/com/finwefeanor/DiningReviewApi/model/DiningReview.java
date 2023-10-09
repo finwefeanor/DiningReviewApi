@@ -11,7 +11,7 @@ public class DiningReview {
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurantId;
+    private Restaurant restaurant;
 
     @ManyToOne //This is used on the many side of a many-to-one relationship. For instance,
     // if you think about the relationship between DiningReview and User,
@@ -20,14 +20,14 @@ public class DiningReview {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private Integer peanutScore;
-    private Integer eggScore;
-    private Integer dairyScore;
+    private Double peanutScore;
+    private Double eggScore;
+    private Double dairyScore;
     private String commentary;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING) // This ensures the enum value's name is used instead of ordinal value.
-    private ReviewStatus status;
+    private ReviewStatus status = ReviewStatus.PENDING;
 
 }
 
