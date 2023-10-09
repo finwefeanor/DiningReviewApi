@@ -1,8 +1,11 @@
 package com.finwefeanor.DiningReviewApi.controller;
 import com.finwefeanor.DiningReviewApi.model.User;
 import com.finwefeanor.DiningReviewApi.repository.UserRepository;
+import jakarta.validation.Valid;
+import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -31,7 +34,7 @@ public class UserController {
     }
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id,
-                             @RequestBody User user) {
+                             @Valid @RequestBody User user) {
         // Using Java's Optional, find the user by ID
         Optional<User> userOptionalToUpdate = userRepository.findById(id);
         if (!userOptionalToUpdate.isPresent()) {
@@ -47,7 +50,7 @@ public class UserController {
         return userRepository.save(existingUser);
     }
     @PostMapping("/users")
-    public ResponseEntity<User> createNewUser(@RequestBody User user) {
+    public ResponseEntity<User> createNewUser(@Valid @RequestBody User user) {
         //creates a user profile for an unregistered user, using a display name that’s unique only to user.
         Optional<User> existingUser = userRepository.findByDisplayName(user.getDisplayName());
         if (existingUser.isPresent()) {

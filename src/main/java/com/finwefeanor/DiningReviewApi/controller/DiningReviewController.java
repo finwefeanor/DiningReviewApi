@@ -28,10 +28,11 @@ public class DiningReviewController {
 
     @GetMapping("/pendingReviews")
     public List<DiningReview> getPendingReviews(){
+
         return diningReviewRepository.findByStatus(ReviewStatus.PENDING);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/{id}/update")
     public ResponseEntity<DiningReview> updateReview(@PathVariable Long id,
                            @RequestBody AdminReviewAction action) {
         Optional<DiningReview> reviewToOptionalToUpdate = diningReviewRepository.findById(id);

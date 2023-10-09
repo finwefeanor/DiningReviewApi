@@ -1,21 +1,38 @@
 package com.finwefeanor.DiningReviewApi.model;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.NonNull;
+//import org.antlr.v4.runtime.misc.NotNull;
+import org.springframework.validation.annotation.Validated;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
 @Entity
 @Data
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull(message = "Display name cannot be null")
+    @Size(min=3, max=20, message="Display name should have between 3 and 20 characters")
     @Column(nullable = false, unique = true)
     private String displayName;
+
+    @NotNull(message = "City cannot be null")
     @Column(nullable = false)
     private String city;
+
+    @NotNull(message = "Country name cannot be null")
     @Column(nullable = false)
     private String country;
+
+    @NotNull(message = "Zip code cannot be null")
+    @Pattern(regexp = "^[0-9]{5}$", message = "Invalid zip code format")
     @Column(nullable = false)
     private String zipCode;
 
@@ -28,5 +45,4 @@ public class User {
     boolean hasPeanutAllergy;
     boolean hasEggAllergy;
     boolean hasDairyAllergy;
-
 }
