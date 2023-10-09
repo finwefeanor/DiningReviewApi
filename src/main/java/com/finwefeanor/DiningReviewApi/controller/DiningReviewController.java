@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/reviews")
 public class DiningReviewController {
@@ -102,7 +103,6 @@ public class DiningReviewController {
 
         return ResponseEntity.ok("New review successfully added!");
     }
-
 
 
     @GetMapping("/restaurant/{restaurantId}/approvedReviews")
